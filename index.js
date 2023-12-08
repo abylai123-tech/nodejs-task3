@@ -1,36 +1,36 @@
-const http=require('http')
+const http = require('http');
 
-let student=[]
+let students = [];
 
-http.createServer((request,response)=>{
+http.createServer((request,response) => {
+  console.log(request.url,request.method);
+  // Метод GET
+  if(request.url.startsWith('/student')); {
+    if (request.method == 'GET') {
+      students.push(request.url.slice(1));
+      response.statusCode = 200;
+      response.end(`<h1>Hello students!</h1>`)
+    }
+    // Метод POST
+      else if(request.method == 'POST') {
+        students.push(request.url.slice(1));
+        console.log(students);
+        response.end('<h1>Students added</h1>')
+      }
+    // Метод DELETE
+      else if(request.method == 'DELETE') {
+        let name = request.url.substring(9);
+        
+        let foundStudent = students.find(students => students == name);
 
-  console.log(request.url)
-  
-  if(request.url=='/student'){
-    response.statusCode=200;
-    response.end('<h1>hello student</h1>');
+        if(foundStudent) {
+          students = students.filter(students => students !== name);
+          response.statusCode = 200;
+          response.end(`<h1>Student ${name} deleted </h1>`)
+        } else {
+          response.statusCode = 404;
+          response.end('Student not found');
+        }
+      }
   }
-  else if(request.url=='/student/num'){
-    response.statusCode=200;
-    response.end('<h1>hello student num</h1>');
-  }
-  else if(request.url=="/teacher"){
-    response.statusCode=200;
-    response.end('<h1>hello teacher</h1>');
-  }
-  else{
-    response.statusCode=404
-    response.end('<h1>NotFound</h1>');
-  }
-
-//  if(request.method=='POST'){
-//   student.push(request.url.slice(1))
-//   console.log(student)
-//   response.end('<h1>студент добавлен</h1>')
-//  }
-
-//  else if(request.method=='GET'){
-//   console.log(student)          
-//   response.end(`<h1>${student[request.url.slice(1)]}</h1>`)
-//  }
 }).listen(3000);
